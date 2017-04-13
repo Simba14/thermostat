@@ -6,6 +6,7 @@ $(document).ready(function() {
     $('#submit').click(function() {
       updateCity($('#location').val());
       callWeather($('#location').val());
+      backgroundPhoto($('#location').val());
     });
   });
 
@@ -58,6 +59,21 @@ $(document).ready(function() {
 
   function updateCity(cityInput) {
     $('#city').text(cityInput);
+  }
+
+  function backgroundPhoto(city) {
+    var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search';
+    var token = '&api_key=79eb26f0b80e9c421a4e3d5614d3f250';
+    var tags = '&tags=' + city
+    var json = '&format=json&jsoncallback=?';
+    $.get(url + token + tags +json, function(data) {
+      console.log("ID: ")
+      var id = (data.photosets.photoset.id[0])
+      // var server = (data.photosets.photoset.server[0])
+      // var farm = (data.photosets.photoset.farm[0])
+      // var secret = (data.photosets.photoset.secret[0])
+      $('#thermostat').css('background-image', "url('https://farm" + farm + ".staticflickr.com/" + server + "/" + id + "_" + secret + ".jpg')")
+    });
   }
 
   function callWeather(city) {

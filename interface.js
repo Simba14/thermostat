@@ -64,9 +64,11 @@ $(document).ready(function() {
   function backgroundPhoto(city) {
     var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search';
     var token = '&api_key=79eb26f0b80e9c421a4e3d5614d3f250';
-    var tags = '&tags=public&' + city
+    var privacy = '&privacy_filter=1'
+    var tags = '&tags=' + city
     var json = '&format=json&jsoncallback=?';
-    $.getJSON(url + token + tags +json, function(data) {
+    console.log(url + token + privacy + tags +json);
+    $.getJSON(url + token + privacy + tags +json, function(data) {
       console.log(data.photos.photo[50].id);
       var id = (data.photos.photo[50].id);
       var server = (data.photos.photo[50].server)
@@ -74,7 +76,7 @@ $(document).ready(function() {
       var secret = (data.photos.photo[50].server)
       var callurl = "https://farm" + farm + ".staticflickr.com/" + server + "/" + id + "_" + secret + ".jpg"
       console.log(callurl)
-      $('body').attr({"style":"background-image: url('" + callurl + "')"});//url("https://farm" + farm + ".staticflickr.com/" + server + "/" + id + "_" + secret + ".jpg")')
+      $('body').attr({"style":"background-image: url('" + callurl + "')"});
     });
   }
 

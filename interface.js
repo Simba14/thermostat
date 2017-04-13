@@ -1,33 +1,6 @@
 $(document).ready(function() {
   var thermostat = new Thermostat();
-  updateTemperature();
-
-  $('#temperature-increase').click(function() {
-    thermostat.increase();
-    updateTemperature();
-  });
-
-  $('#temperature-decrease').click(function(){
-    thermostat.decrease();
-    updateTemperature();
-  });
-
-  $('#temperature-reset').click(function(){
-    thermostat.reset();
-    updateTemperature();
-  });
-
-  $('#powersaving-on').click(function() {
-    thermostat.powerSavingModeOn();
-    $('#power-saving-mode').text('on');
-    updateTemperature();
-  });
-
-  $('#powersaving-off').click(function() {
-    thermostat.powerSavingModeOff();
-    $('#power-saving-mode').text('off');
-    updateTemperature();
-  });
+  updateThermostatStatistics();
 
   $(document).ready(function() {
     $('#submit').click(function() {
@@ -36,17 +9,62 @@ $(document).ready(function() {
     });
   });
 
+  $('#temperature-increase').click(function() {
+    thermostat.increase();
+    updateThermostatStatistics();
+  });
+
+  $('#temperature-decrease').click(function(){
+    thermostat.decrease();
+    updateThermostatStatistics();
+  });
+
+  $('#temperature-reset').click(function(){
+    thermostat.reset();
+    updateThermostatStatistics();
+  });
+
+  $('#powersaving-on').click(function() {
+    thermostat.powerSavingModeOn();
+    updateThermostatStatistics();
+  });
+
+  $('#powersaving-off').click(function() {
+    thermostat.powerSavingModeOff();
+    updateThermostatStatistics();
+  });
+
+  function updateTemperature() {
+    $('#temperature').text(thermostat.temp);
+  }
+
+  function updateEnergyUsage() {
+    $('#temperature').attr('class', thermostat.currentEnergyUsage());$
+  }
+
+  function updatePowerSavingStatus() {
+    if (thermostat.powerSavingMode == true) {
+      $('#power-saving-mode').text('on');
+    } else if (thermostat.powerSavingMode == false) {
+      $('#power-saving-mode').text('off');
+    }
+  }
+
+  function updateThermostatStatistics() {
+    updateTemperature();
+    updateEnergyUsage();
+    updatePowerSavingStatus();
+  }
+
   function updateCity(cityInput) {
     $('#city').text(cityInput);
   }
 
-  function updateTemperature() {
-    $('#temperature').text(thermostat.temp);
-    $('#temperature').attr('class', thermostat.currentEnergyUsage());
-  }
-
   function callWeather(city) {
-    $.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=8e08a874f67c6b7363b617a55a2d8072&units=metric', function(api) {
+    var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + city;
+    var token = '&appid=8e08a874f67c6b7363b617a55a2d8072';
+    var units = '&units=metric'
+    $.get(url + token + units, function(api) {
       $('#weather').text(api.main.temp);
     });
   }

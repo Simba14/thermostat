@@ -64,15 +64,17 @@ $(document).ready(function() {
   function backgroundPhoto(city) {
     var url = 'https://api.flickr.com/services/rest/?method=flickr.photos.search';
     var token = '&api_key=79eb26f0b80e9c421a4e3d5614d3f250';
-    var tags = '&tags=' + city
+    var tags = '&tags=public&' + city
     var json = '&format=json&jsoncallback=?';
-    $.get(url + token + tags +json, function(data) {
-      console.log("ID: ")
-      var id = (data.photosets.photoset.id[0])
-      // var server = (data.photosets.photoset.server[0])
-      // var farm = (data.photosets.photoset.farm[0])
-      // var secret = (data.photosets.photoset.secret[0])
-      $('#thermostat').css('background-image', "url('https://farm" + farm + ".staticflickr.com/" + server + "/" + id + "_" + secret + ".jpg')")
+    $.getJSON(url + token + tags +json, function(data) {
+      console.log(data.photos.photo[50].id);
+      var id = (data.photos.photo[50].id);
+      var server = (data.photos.photo[50].server)
+      var farm = (data.photos.photo[50].farm)
+      var secret = (data.photos.photo[50].server)
+      var callurl = "https://farm" + farm + ".staticflickr.com/" + server + "/" + id + "_" + secret + ".jpg"
+      console.log(callurl)
+      $('body').attr({"style":"background-image: url('" + callurl + "')"});//url("https://farm" + farm + ".staticflickr.com/" + server + "/" + id + "_" + secret + ".jpg")')
     });
   }
 
